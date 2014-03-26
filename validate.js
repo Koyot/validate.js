@@ -15,6 +15,7 @@
     var defaults = {
         messages: {
             required: 'The %s field is required.',
+			required_if: 'The %s and %s field are both required either filled or empty',
             matches: 'The %s field does not match the %s field.',
             "default": 'The %s field is still set to default, please change.',
             valid_email: 'The %s field must contain a valid email address.',
@@ -51,7 +52,7 @@
         numericRegex = /^[0-9]+$/,
         integerRegex = /^\-?[0-9]+$/,
         decimalRegex = /^\-?[0-9]*\.?[0-9]+$/,
-        emailRegex = /^[a-zA-Z0-9.!#$%&amp;'*+\-\/=?\^_`{|}~\-]+@[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*$/,
+        emailRegex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i,
         alphaRegex = /^[a-z]+$/i,
         alphaNumericRegex = /^[a-z0-9]+$/i,
         alphaDashRegex = /^[a-z0-9_\-]+$/i,
@@ -338,6 +339,12 @@
 
             return (value !== null && value !== '');
         },
+		required_if: function(field, matchName){
+			var el = this.form[matchName];
+			if(!(field.value !== null && field.value !== '') && (el.value !== '' && el.value !== null))
+				return false;
+			return true;
+		},
 
         "default": function(field, defaultName){
             return field.value !== defaultName;
